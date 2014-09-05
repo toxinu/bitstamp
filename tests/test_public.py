@@ -47,6 +47,4 @@ class PublicTestCase(unittest.TestCase):
     def test_transaction_get(self):
         with vcr.use_cassette(os.path.join(FIXTURES_PATH, 'transaction.yaml')):
             transactions = self.api.get_transactions()
-            import ipdb; ipdb.set_trace()
             self.assertIsInstance(transactions, list)
-
