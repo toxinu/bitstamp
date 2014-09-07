@@ -2,13 +2,13 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 try:
-    from urllib.request import urlopen
-    from urllib.parse import urlparse
-    from urllib.parse import urljoin
-except ImportError:
-    from urlparse import urlparse
-    from urlparse import urljoin
-    from urllib import urlopen
+    from urllib.request import urlopen  # pragma: no cover
+    from urllib.parse import urlparse   # pragma: no cover
+    from urllib.parse import urljoin    # pragma: no cover
+except ImportError:                     # pragma: no cover
+    from urlparse import urlparse       # pragma: no cover
+    from urlparse import urljoin        # pragma: no cover
+    from urllib import urlopen          # pragma: no cover
 
 from requests import Session
 from requests import Request
@@ -16,6 +16,8 @@ from requests import Request
 from .resources import Ticker
 from .resources import OrderBook
 from .resources import Transaction
+
+from .exceptions import ParametersError
 
 
 class Bitstamp(object):
@@ -35,13 +37,23 @@ class Bitstamp(object):
         response = self._send(request)
         return Ticker(**response.json())
 
-    def get_order_book(self):
-        request = Request('GET', urljoin(self.url, 'order_book'))
+    def get_order_book(self, group=True):
+        if group not in [True, False]:
+            raise ParametersError('"group" parameter must be a boolean.')
+        group = 1 if group else 0
+
+        request = Request(
+            'GET', urljoin(self.url, 'order_book'), params={'group': group})
         response = self._send(request)
         return OrderBook(**response.json())
 
-    def get_transactions(self):
-        request = Request('GET', urljoin(self.url, 'transactions'))
+    def get_transactions(self, time="hour"):
+        if time not in ["hour", "minute"]:
+            raise ParametersError(
+                '"time" parameter must be "hour" or "minute".')
+
+        request = Request(
+            'GET', urljoin(self.url, 'transactions'), params={'time': time})
         response = self._send(request)
         transactions = []
         for transaction in response.json():
