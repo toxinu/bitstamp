@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+from __future__ import unicode_literals
+
 import datetime
 
 
@@ -13,21 +15,33 @@ class Resource(object):
 
 
 class TimestampResource(object):
-    def timestamp_as_datetime(self):
-        return datetime.datetime.fromtimestamp(self.timestamp)
+    def __init__(self):
+        if not hasattr(self, '_timestamp_attr'):
+            self._timestamp_attr = 'timestamp'
+
+        setattr(
+            self,
+            '%s_as_datetime' % self._timestamp_attr,
+            lambda: datetime.datetime.fromtimestamp(
+                getattr(self, self._timestamp_attr)))
 
     def __eq__(self, other):
-        if hasattr(other, 'timestamp_as_datetime'):
-            if other.timestamp_as_datetime() == self.timestamp_as_datetime():
+        if hasattr(other, '%s_as_datetime' % self._timestamp_attr):
+            if getattr(
+                other, '%s_as_datetime' % other._timestamp_attr)() == getattr(
+                    self, '%s_as_datetime' % self._timestamp_attr)():
                 return True
         return False
 
     def __lt__(self, other):
-        if hasattr(other, 'timestamp_as_datetime'):
-            if other.timestamp_as_datetime() < self.timestamp_as_datetime():
+        if hasattr(other, '%s_as_datetime' % self._timestamp_attr):
+            if getattr(
+                other, '%s_as_datetime' % other._timestamp_attr)() < getattr(
+                    self, '%s_as_datetime' % self._timestamp_attr)():
                 return True
         return False
 
 from .ticker import Ticker
 from .order_book import OrderBook
 from .transaction import Transaction
+from .conversion_rate import ConversionRate
