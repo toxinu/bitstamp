@@ -14,6 +14,7 @@ from bitstamp import Bitstamp
 from bitstamp.resources import Ticker
 from bitstamp.resources import OrderBook
 from bitstamp.resources import Transaction
+from bitstamp.resources import ConversionRate
 
 from bitstamp.exceptions import ParametersError
 
@@ -63,9 +64,9 @@ class PublicTestCase(unittest.TestCase):
 
     def test_order_book_bad_group(self):
         self.assertRaises(
-            ParametersError, self.api.get_order_book, {'group': 'yeah'})
+            ParametersError, self.api.get_order_book, group='yeah')
         self.assertRaises(
-            ParametersError, self.api.get_order_book, {'group': [1, 2]})
+            ParametersError, self.api.get_order_book, group=[1, 2])
 
     def test_transaction_get(self):
         with vcr.use_cassette(os.path.join(FIXTURES_PATH, 'transaction.yaml')):
@@ -85,3 +86,24 @@ class PublicTestCase(unittest.TestCase):
             transactions_03 = self.api.get_transactions(time="minute")
             self.assertNotEqual(
                 len(transactions_01), len(transactions_03))
+
+    def test_transaction_bad_time(self):
+        self.assertRaises(
+            ParametersError, self.api.get_transactions, time='yeah')
+        self.assertRaises(
+            ParametersError, self.api.get_transactions, time=[1, 2])
+
+    def test_conversion_rate_get(self):
+        with vcr.use_cassette(
+                os.path.join(FIXTURES_PATH, 'conversion_rate.yaml')):
+            conversion_rate = self.api.get_conversion_rate()
+            self.assertIsInstance(conversion_rate, ConversionRate)
+            self.assertEqual(conversion_rate.currencies, ('eur', 'usd'))
+
+    def test_conversion_rate_bad_src(self):
+        self.assertRaises(
+            ParametersError, self.api.get_conversion_rate, src='yeah')
+
+    def test_conversion_rate_bad_dst(self):
+        self.assertRaises(
+            ParametersError, self.api.get_conversion_rate, dst='yeah')
