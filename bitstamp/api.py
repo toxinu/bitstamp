@@ -16,6 +16,7 @@ from requests import Request
 from .resources import Ticker
 from .resources import OrderBook
 from .resources import Transaction
+from .resources import ConversionRate
 
 from .exceptions import ParametersError
 
@@ -59,3 +60,20 @@ class Bitstamp(object):
         for transaction in response.json():
             transactions.append(Transaction(**transaction))
         return transactions
+
+    def get_conversion_rate(self, src="eur", dst="usd"):
+        src = src.lower()
+        dst = dst.lower()
+
+        if src not in ConversionRate.ALL_SRC:
+            raise ParametersError(
+                '"src" parameter must be one of "%s"' % ','.join(
+                    ConversionRate.ALL_SRC))
+        if dst not in ConversionRate.ALL_DST:
+            raise ParametersError(
+                '"dst" parameter must be one of "%s"' % ','.join(
+                    ConversionRate.ALL_DST))
+
+        request = Request('GET', urljoin(self.url, '%s_%s' % (src, dst)))
+        response = self._send(request)
+        return ConversionRate(src, dst, **response.json())
