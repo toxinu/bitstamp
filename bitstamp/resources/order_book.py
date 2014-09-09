@@ -14,3 +14,5 @@ class OrderBook(Resource, TimestampResource):
 
         # Convert list of list of two string _to_ tuple of tuple of two float
         self.bids = tuple(tuple((float(x[0]), float(x[1]))) for x in self.bids)
+
+        super(OrderBook, self).__init__()

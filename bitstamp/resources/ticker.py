@@ -18,3 +18,5 @@ class Ticker(Resource, TimestampResource):
             'timestamp': int
         }
         self._type_data(kwargs)
+
+        super(Ticker, self).__init__()
