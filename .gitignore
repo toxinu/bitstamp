@@ -3,3 +3,4 @@ htmlcov
 __pycache__
 .coverage
 virtenv
+docs/build
