@@ -1,6 +1,6 @@
 class ParametersError(Exception):
-    pass
+    """ Some parameters are wrong typed or not available. """
 
 
 class MissingCredentials(Exception):
-    pass
+    """ Authentication credentials are missing. """
