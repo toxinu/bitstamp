@@ -22,6 +22,8 @@ from .resources import OrderBook
 from .resources import Transaction
 from .resources import ConversionRate
 
+from .resources import AccountBalance
+
 from .exceptions import ParametersError
 from .exceptions import MissingCredentials
 
@@ -160,3 +162,9 @@ class Bitstamp(object):
         request = Request('GET', urljoin(self.url, '%s_%s' % (src, dst)))
         response = self._send(request)
         return ConversionRate(src, dst, **response.json())
+
+    def get_account_balance(self):
+        """ Return a :class:`AccountBalance` """
+        request = Request('POST', urljoin(self.url, 'balance'))
+        response = self._send(request, is_auth=True)
+        return AccountBalance(**response.json())
