@@ -45,3 +45,5 @@ from .ticker import Ticker
 from .order_book import OrderBook
 from .transaction import Transaction
 from .conversion_rate import ConversionRate
+
+from .account_balance import account_balance
