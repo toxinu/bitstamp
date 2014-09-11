@@ -40,4 +40,9 @@ Tests
     coverage html
 
 
+Todo
+----
+
+* Exception for bad credentials (and manage it)
+* Ask for counter about request throttling
 .. _Bitstamp: https://www.bitstamp.net/api/
