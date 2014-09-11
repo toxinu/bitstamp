@@ -21,6 +21,15 @@ Get your `Bitstamp` module ::
     >>> from bitstamp import Bitstamp
     >>> api = Bitstamp()
 
+Documentation
+-------------
+
+You can build the documentation with Sphinx: ::
+
+    cd docs
+    make html
+    open build/html/index.html
+
 Tests
 -----
 
