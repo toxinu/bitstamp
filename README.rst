@@ -20,6 +20,11 @@ Get your `Bitstamp` module ::
 
     >>> from bitstamp import Bitstamp
     >>> api = Bitstamp()
+    >>> ticker = api.get_ticker()
+    >>> ticker.timestamp
+    >>> 1410822188
+    >>> ticker.bid
+    >>> 470.69
 
 Documentation
 -------------
