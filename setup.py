@@ -27,9 +27,9 @@ setup(
     include_package_data=True,
     zip_safe=False,
     description='Bitstamp API',
-    url='https://bitbucket.org/socketubs/bitstamp',
-    author='Geoffrey Lehée',
-    author_email='hello@socketubs.org',
+    url='https://github.com/toxinu/bitstamp',
+    author='toxinu',
+    author_email='toxinu@gmail.com',
     install_requires=required,
     classifiers=[
         'Intended Audience :: Developers',
